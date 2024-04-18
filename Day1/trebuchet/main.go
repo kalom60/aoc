@@ -13,7 +13,7 @@ import (
 var textNumbers = [9]string{"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
 
 func main() {
-	file, err := os.Open("calibration.txt")
+	file, err := os.Open("puzzleInput.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
