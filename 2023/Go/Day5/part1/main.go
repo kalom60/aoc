@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -20,7 +21,7 @@ func main() {
 	defer file.Close()
 
 	var seeds []int
-	// var lowestLocation int
+	lowestLocation := math.MaxInt
 	mapping := make(map[string][][]int)
 	currentMapping := ""
 
@@ -62,15 +63,30 @@ func main() {
 		log.Fatal(err)
 	}
 
-	for _, m := range maps {
-		ranges := mapping[m]
-		fmt.Println(m, ranges)
+	for _, seed := range seeds {
+		currLine := seed
 
-        for _, seed := range seeds {
-            fmt.Printf("%d\t", seed)
-        }
-        fmt.Println()
+		for _, m := range maps {
+			ranges := mapping[m]
+
+			for _, r := range ranges {
+				source := r[1]
+				dest := r[0]
+				rangeLength := r[2]
+
+				if currLine >= source && currLine < source+rangeLength {
+					currLine = dest + (currLine - source)
+					break
+				}
+			}
+		}
+
+		if lowestLocation > currLine {
+			lowestLocation = currLine
+		}
 	}
+
+	fmt.Println(lowestLocation)
 }
 
 func convertToNumber(input []string) []int {
